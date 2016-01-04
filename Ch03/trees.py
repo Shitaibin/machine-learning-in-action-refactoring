@@ -18,52 +18,64 @@ def create_dataset():
     return dataSet, labels
 
 
-def calc_entropy(dataSet):
-    n_entries = len(dataSet)
-    label_counts = {}
+def calc_entropy(dataset):
+    n_entries = len(dataset)
+    label_counts = dict()
     # the the number of unique elements and their occurance
-    for featVec in dataSet:
-        label = featVec[-1]
+    for feat_vec in dataset:
+        label = feat_vec[-1]
         if label not in label_counts.keys():
             label_counts[label] = 0
         label_counts[label] += 1
-    shannonEnt = 0.0
+
+    shannon_entropy = 0.0
     for key in label_counts:
         prob = float(label_counts[key]) / n_entries
-        shannonEnt -= prob * log(prob, 2)  # log base 2
-    return shannonEnt
+        shannon_entropy -= prob * log(prob, 2)  # log base 2
+    return shannon_entropy
 
 
-def split_dataset(dataSet, axis, value):
-    retDataSet = []
-    for featVec in dataSet:
-        if featVec[axis] == value:
-            reducedFeatVec = featVec[:axis]  # chop out axis used for splitting
-            reducedFeatVec.extend(featVec[axis + 1:])
-            retDataSet.append(reducedFeatVec)
-    return retDataSet
+def split_dataset(dataset, axis, value):
+    """
+    Get subset, which dataset[axis] == value, and remove this axis.
+    :param dataset: 2d array.
+    :param axis: int, feature id.
+    :param value: feature value.
+    :return: 2d array.
+    """
+    subset = []
+    for feature_vector in dataset:
+        if feature_vector[axis] == value:
+            reduced_feature_vector = feature_vector[:axis]  # chop out axis used for splitting
+            reduced_feature_vector.extend(feature_vector[axis + 1:])
+            subset.append(reduced_feature_vector)
+    return subset
 
 
-def choose_best_feature_to_split(dataSet):
-    numFeatures = len(dataSet[0]) - 1  # the last column is used for the labels
-    baseEntropy = calc_entropy(dataSet)
-    bestInfoGain = 0.0
-    bestFeature = -1
-    for i in range(numFeatures):  # iterate over all the features
+def choose_best_feature_to_split(dataset):
+    """
+    :param dataset: 2d array.
+    :return:
+    """
+    n_features = len(dataset[0]) - 1  # the last column is used for the labels
+    base_entropy = calc_entropy(dataset)
+    best_info_gain = 0.0
+    best_feature = -1
+    for i in range(n_features):  # iterate over all the features
         # create a list of all the examples of this feature
-        featList = [example[i] for example in dataSet]
-        uniqueVals = set(featList)  # get a set of unique values
-        newEntropy = 0.0
-        for value in uniqueVals:
-            subDataSet = split_dataset(dataSet, i, value)
-            prob = len(subDataSet) / float(len(dataSet))
-            newEntropy += prob * calc_entropy(subDataSet)
+        feat_list = [example[i] for example in dataset]
+        unique_vals_of_feature = set(feat_list)  # get a set of unique values
+        new_entropy = 0.0
+        for value in unique_vals_of_feature:
+            subset = split_dataset(dataset, i, value)
+            prob = len(subset) / float(len(dataset))
+            new_entropy += prob * calc_entropy(subset)
         # calculate the info gain; ie reduction in entropy
-        infoGain = baseEntropy - newEntropy
-        if (infoGain > bestInfoGain):  # compare this to the best gain so far
-            bestInfoGain = infoGain  # if better than current best, set to best
-            bestFeature = i
-    return bestFeature  # returns an integer
+        infoGain = base_entropy - new_entropy
+        if infoGain > best_info_gain:  # compare this to the best gain so far
+            best_info_gain = infoGain  # if better than current best, set to best
+            best_feature = i
+    return best_feature  # returns an integer
 
 
 def majority_cnt(classList):
