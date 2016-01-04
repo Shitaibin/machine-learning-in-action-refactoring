@@ -19,17 +19,17 @@ def create_dataset():
 
 
 def calc_entropy(dataSet):
-    numEntries = len(dataSet)
-    labelCounts = {}
+    n_entries = len(dataSet)
+    label_counts = {}
     # the the number of unique elements and their occurance
     for featVec in dataSet:
-        currentLabel = featVec[-1]
-        if currentLabel not in labelCounts.keys():
-            labelCounts[currentLabel] = 0
-        labelCounts[currentLabel] += 1
+        label = featVec[-1]
+        if label not in label_counts.keys():
+            label_counts[label] = 0
+        label_counts[label] += 1
     shannonEnt = 0.0
-    for key in labelCounts:
-        prob = float(labelCounts[key]) / numEntries
+    for key in label_counts:
+        prob = float(label_counts[key]) / n_entries
         shannonEnt -= prob * log(prob, 2)  # log base 2
     return shannonEnt
 

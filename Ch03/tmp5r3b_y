@@ -1,0 +1,15 @@
+
+import rope.base.project
+from rope.base import libutils
+
+myproject = rope.base.project.Project(
+    '/home/a')
+#myproject.validate('/home/a/wk/refactor/mlia/machine-learning-in-action-refactoring/Ch03/trees.py')
+myproject.validate()
+ropy = libutils.path_to_resource(myproject, '/home/a/wk/refactor/mlia/machine-learning-in-action-refactoring/Ch03/trees.py')
+
+from rope.refactor.rename import Rename
+changes = Rename(myproject, ropy, 479).get_changes('dataset', docs=True)
+myproject.do(changes)
+
+myproject.close()
