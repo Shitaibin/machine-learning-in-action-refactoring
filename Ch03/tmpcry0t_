@@ -9,7 +9,7 @@ myproject.validate()
 ropy = libutils.path_to_resource(myproject, '/home/a/wk/refactor/mlia/machine-learning-in-action-refactoring/Ch03/trees.py')
 
 from rope.refactor.rename import Rename
-changes = Rename(myproject, ropy, 3874).get_changes('store_tree', docs=True)
+changes = Rename(myproject, ropy, 3874).get_changes('store_decision_tree', docs=True)
 myproject.do(changes)
 
 myproject.close()

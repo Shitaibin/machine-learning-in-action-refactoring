@@ -1,26 +1,29 @@
-'''
+"""
 Created on Oct 12, 2010
 Decision Tree Source Code for Machine Learning in Action Ch. 3
 @author: Peter Harrington
-'''
+@Refactored by: Shitaibin
+"""
+
+
 from math import log
 import operator
 
 
 def create_dataset():
-    dataSet = [[1, 1, 'yes'],
+    dataset = [[1, 1, 'yes'],
                [1, 1, 'yes'],
                [1, 0, 'no'],
                [0, 1, 'no'],
                [0, 1, 'no']]
-    labels = ['no surfacing', 'flippers']
+    feat_names = ['no surfacing', 'flippers']
     # change to discrete values
-    return dataSet, labels
+    return dataset, feat_names
 
 
 def calc_entropy(dataset):
     n_entries = len(dataset)
-    label_counts = dict()
+    label_counts = {}
     # the the number of unique elements and their occurance
     for feat_vec in dataset:
         label = feat_vec[-1]
@@ -29,8 +32,8 @@ def calc_entropy(dataset):
         label_counts[label] += 1
 
     shannon_entropy = 0.0
-    for key in label_counts:
-        prob = float(label_counts[key]) / n_entries
+    for label in label_counts:
+        prob = float(label_counts[label]) / n_entries
         shannon_entropy -= prob * log(prob, 2)  # log base 2
     return shannon_entropy
 
@@ -71,62 +74,93 @@ def choose_best_feature_to_split(dataset):
             prob = len(subset) / float(len(dataset))
             new_entropy += prob * calc_entropy(subset)
         # calculate the info gain; ie reduction in entropy
-        infoGain = base_entropy - new_entropy
-        if infoGain > best_info_gain:  # compare this to the best gain so far
-            best_info_gain = infoGain  # if better than current best, set to best
+        info_gain = base_entropy - new_entropy
+
+        if info_gain > best_info_gain:  # compare this to the best gain so far
+            best_info_gain = info_gain  # if better than current best, set to best
             best_feature = i
+
     return best_feature  # returns an integer
 
 
-def majority_cnt(classList):
-    classCount = {}
-    for vote in classList:
-        if vote not in classCount.keys():
-            classCount[vote] = 0
-        classCount[vote] += 1
-    sortedClassCount = sorted(
-        classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
-    return sortedClassCount[0][0]
+def majority_class(class_list):
+    """
+    Choose the majority class label.
+    P.S. If the two class have the same count. Choose the one appear in the latest.
+    :param class_list:
+    :return:
+    """
+    class_count = {}
+    for vote in class_list:
+        if vote not in class_count.keys():
+            class_count[vote] = 0
+        class_count[vote] += 1
+
+    sorted_class_count = sorted(class_count.iteritems(),
+                                key=operator.itemgetter(1),
+                                reverse=True)
+    return sorted_class_count[0][0]
 
 
-def create_tree(dataSet, labels):
-    classList = [example[-1] for example in dataSet]
-    if classList.count(classList[0]) == len(classList):
-        return classList[0]  # stop splitting when all of the classes are equal
-    # stop splitting when there are no more features in dataSet
-    if len(dataSet[0]) == 1:
-        return majority_cnt(classList)
-    bestFeat = choose_best_feature_to_split(dataSet)
-    bestFeatLabel = labels[bestFeat]
-    myTree = {bestFeatLabel: {}}
-    del(labels[bestFeat])
-    featValues = [example[bestFeat] for example in dataSet]
-    uniqueVals = set(featValues)
-    for value in uniqueVals:
+def create_tree(dataset, feat_names):
+    """
+    Create decision tree.
+    :param dataset: 2d array.
+    :param feat_names: targets
+    :return: class label or dict of child tree.
+    """
+    class_list = [item[-1] for item in dataset]
+
+    # stop splitting when all of the classes are equal
+    # refactoring: using set.
+    if class_list.count(class_list[0]) == len(class_list):
+        return class_list[0]
+
+    # stop splitting when there are no more features in dataset
+    if len(dataset[0]) == 1:
+        return majority_class(class_list)
+
+    # splitting
+    best_feat = choose_best_feature_to_split(dataset)
+    best_feat_name = feat_names[best_feat]
+    decision_tree = {best_feat_name: {}}
+    del(feat_names[best_feat])
+
+    feat_vals = [item[best_feat] for item in dataset]
+    unique_val = set(feat_vals)
+    for value in unique_val:
         # copy all of labels, so trees don't mess up existing labels
-        subLabels = labels[:]
-        myTree[bestFeatLabel][value] = create_tree(
-            split_dataset(dataSet, bestFeat, value), subLabels)
-    return myTree
+        sub_labels = feat_names[:]
+        decision_tree[best_feat_name][value] = create_tree(
+            split_dataset(dataset, best_feat, value), sub_labels)
+
+    return decision_tree
 
 
-def classify(inputTree, featLabels, testVec):
-    firstStr = inputTree.keys()[0]
-    secondDict = inputTree[firstStr]
-    featIndex = featLabels.index(firstStr)
-    key = testVec[featIndex]
-    valueOfFeat = secondDict[key]
-    if isinstance(valueOfFeat, dict):
-        classLabel = classify(valueOfFeat, featLabels, testVec)
+def classify(decision_tree, feat_names, test_date):
+    """
+    Using decision tree do classification.
+    :param decision_tree: 
+    :param feat_names: of test_data.
+    :param test_date:
+    :return: 
+    """
+    current_classify_feat = decision_tree.keys()[0]
+    child_decision_tree = decision_tree[current_classify_feat]
+    feat_index = feat_names.index(current_classify_feat)
+    feat_val = test_date[feat_index]
+    classify_result = child_decision_tree[feat_val]
+    if isinstance(classify_result, dict):  # not a leaf node.
+        class_label = classify(classify_result, feat_names, test_date)
     else:
-        classLabel = valueOfFeat
-    return classLabel
+        class_label = classify_result
+    return class_label
 
 
-def store_tree(inputTree, filename):
+def store_decision_tree(decision_tree, filename):
     import pickle
     fw = open(filename, 'w')
-    pickle.dump(inputTree, fw)
+    pickle.dump(decision_tree, fw)
     fw.close()
 
 

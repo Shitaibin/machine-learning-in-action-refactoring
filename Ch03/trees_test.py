@@ -1,13 +1,21 @@
+"""
+Created on Jan 4, 2016
+Decision Tree Unittest Source Code for trees.py.
+@author: Shitaibin
+"""
+
+
 import trees
 import unittest
 from math import log
+
 
 class TreesTestCase(unittest.TestCase):
     """
     Unittest for trees.py.
     """
     def test_calc_entropy(self):
-        data, labels = trees.create_dataset()
+        data, feat_names = trees.create_dataset()
         entropy = -(0.4 * log(0.4, 2) + 0.6 * log(0.6, 2))
         self.assertEqual(entropy, trees.calc_entropy(data))
 
@@ -16,6 +24,7 @@ class TreesTestCase(unittest.TestCase):
 
         :return:
         """
+        # In this test. test data without label column.
         # test 1
         data = [[1, 2],
                 [1, 3],
@@ -35,27 +44,69 @@ class TreesTestCase(unittest.TestCase):
         """
         :return:
         """
-        # In this test. test data without label column.
 
         # positive test
         # test 1, best feature is feature 0
-        data = [[1, 2],
-                [1, 3],
-                [2, 3]]
-        best_featrue = 0
-        self.assertEqual(best_featrue, trees.choose_best_feature_to_split(data))
+        data = [[1, 2, 'yes'],
+                [1, 3, 'yes'],
+                [2, 3, 'no']]
+        best_feature = 0
+        self.assertEqual(best_feature, trees.choose_best_feature_to_split(data))
 
-        # negtive test
-        # test 2, data is empty
+        # test 2, best feature is feature 0
+        data = [[1, 2, 'yes'],
+                [2, 3, 'no'],
+                [3, 3, 'no']]
+        best_feature = 0
+        self.assertEqual(best_feature, trees.choose_best_feature_to_split(data))
+
+        # negative test
+        # test 3, data is empty
         data = []
         self.assertRaises(IndexError, lambda: trees.choose_best_feature_to_split(data))
 
-        def test_majority_cnt(self):
-            """
+    def test_majority_class(self):
+        """
+        unittest for majority_class.
+        :param self:
+        :return:
+        """
+        class_list = ['yes', 'no', 'no', 'yes']
+        majority_class = 'yes'
+        self.assertEqual(majority_class, trees.majority_class(class_list))
 
-            :param self:
-            :return:
-            """
+        class_list = ['yes', 'no', 'no', 'yes', 'no']
+        majority_class = 'no'
+        self.assertEqual(majority_class, trees.majority_class(class_list))
+
+        class_list = ['yes', 'no', 'no', 'yes', 'no']
+        majority_class = 'no'
+        self.assertEqual(majority_class, trees.majority_class(class_list))
+
+        class_list = ['yes', 'no', 'no', 'yes', 'maybe']
+        majority_class = 'yes'
+        self.assertEqual(majority_class, trees.majority_class(class_list))
+
+        class_list = ['yes', 'maybe', 'no', 'yes', 'maybe']
+        majority_class = 'maybe'
+        self.assertEqual(majority_class, trees.majority_class(class_list))
+
+    def test_create_tree(self):
+        """
+        Unittest for create tree.
+        :return:
+        """
+        data, feat_names = trees.create_dataset()
+        decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.assertEqual(decision_tree, trees.create_tree(data, feat_names))
+
+        data = [[1, 2, 'yes'],
+                [1, 3, 'yes'],
+                [2, 3, 'no']]
+        feat_names = ['no surfacing', 'flippers']
+        decision_tree = {'no surfacing': {1: 'yes', 2: 'no'}}
+        self.assertEqual(decision_tree, trees.create_tree(data, feat_names))
+
 
 if __name__ == "__main__":
     unittest.main()
