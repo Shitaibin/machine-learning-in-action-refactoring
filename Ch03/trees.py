@@ -7,6 +7,7 @@ Decision Tree Source Code for Machine Learning in Action Ch. 3
 
 import operator
 from math import log
+import pickle
 
 
 def create_dataset():
@@ -40,10 +41,10 @@ def calc_entropy(dataset):
 def split_dataset(dataset, axis, value):
     """
     Get subset, which dataset[axis] == value, and remove this axis.
-    :param dataset: 2d array.
+    :param dataset: 2d list.
     :param axis: int, feature id.
     :param value: feature value.
-    :return: 2d array.
+    :return: 2d list.
     """
     subset = []
     for feature_vector in dataset:
@@ -56,7 +57,7 @@ def split_dataset(dataset, axis, value):
 
 def choose_best_feature_to_split(dataset):
     """
-    :param dataset: 2d array.
+    :param dataset: 2d list.
     :return:
     """
     n_features = len(dataset[0]) - 1  # the last column is used for the labels
@@ -64,11 +65,10 @@ def choose_best_feature_to_split(dataset):
     best_info_gain = 0.0
     best_feature = -1
     for i in range(n_features):  # iterate over all the features
-        # create a list of all the examples of this feature
-        feat_list = [example[i] for example in dataset]
-        unique_vals_of_feature = set(feat_list)  # get a set of unique values
+        # get a set of unique values
+        feat_unique_vals = set([item[i] for item in dataset])
         new_entropy = 0.0
-        for value in unique_vals_of_feature:
+        for value in feat_unique_vals:
             subset = split_dataset(dataset, i, value)
             prob = len(subset) / float(len(dataset))
             new_entropy += prob * calc_entropy(subset)
@@ -86,6 +86,7 @@ def majority_class(class_list):
     """
     Choose the majority class label.
     P.S. If the two class have the same count. Choose the one appear in the latest.
+    :rtype: string or int
     :param class_list:
     :return:
     """
@@ -104,15 +105,14 @@ def majority_class(class_list):
 def create_tree(dataset, feat_names):
     """
     Create decision tree.
-    :param dataset: 2d array.
+    :param dataset: 2d list.
     :param feat_names: targets
     :return: class label or dict of child tree.
     """
     class_list = [item[-1] for item in dataset]
 
     # stop splitting when all of the classes are equal
-    # refactoring: using set.
-    if class_list.count(class_list[0]) == len(class_list):
+    if len(set(class_list)) == 1:
         return class_list[0]
 
     # stop splitting when there are no more features in dataset
@@ -120,19 +120,25 @@ def create_tree(dataset, feat_names):
         return majority_class(class_list)
 
     # splitting
+    return splitting_tree(dataset, feat_names)
+
+
+def splitting_tree(dataset, feat_names):
+    """
+    Splitting decision tree.
+    :param dataset:
+    :param feat_names:
+    :return:
+    """
     best_feat = choose_best_feature_to_split(dataset)
     best_feat_name = feat_names[best_feat]
     decision_tree = {best_feat_name: {}}
-    del(feat_names[best_feat])
-
-    feat_vals = [item[best_feat] for item in dataset]
-    unique_val = set(feat_vals)
-    for value in unique_val:
+    del (feat_names[best_feat])
+    feat_unique_vals = set([item[best_feat] for item in dataset])
+    for value in feat_unique_vals:
         # copy all of labels, so trees don't mess up existing labels
-        sub_labels = feat_names[:]
         decision_tree[best_feat_name][value] = create_tree(
-            split_dataset(dataset, best_feat, value), sub_labels)
-
+                split_dataset(dataset, best_feat, value), feat_names[:])
     return decision_tree
 
 
@@ -157,13 +163,11 @@ def classify(decision_tree, feat_names, test_date):
 
 
 def store_decision_tree(decision_tree, filename):
-    import pickle
     fw = open(filename, 'w')
     pickle.dump(decision_tree, fw)
     fw.close()
 
 
 def grab_tree(filename):
-    import pickle
     fr = open(filename)
     return pickle.load(fr)
