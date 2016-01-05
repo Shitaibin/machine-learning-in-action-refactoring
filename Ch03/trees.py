@@ -5,9 +5,8 @@ Decision Tree Source Code for Machine Learning in Action Ch. 3
 @Refactored by: Shitaibin
 """
 
-
-from math import log
 import operator
+from math import log
 
 
 def create_dataset():

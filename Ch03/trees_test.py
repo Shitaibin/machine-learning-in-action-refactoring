@@ -4,16 +4,17 @@ Decision Tree Unittest Source Code for trees.py.
 @author: Shitaibin
 """
 
-
-import trees
 import unittest
 from math import log
+
+import trees
 
 
 class TreesTestCase(unittest.TestCase):
     """
     Unittest for trees.py.
     """
+
     def test_calc_entropy(self):
         data, feat_names = trees.create_dataset()
         entropy = -(0.4 * log(0.4, 2) + 0.6 * log(0.6, 2))
@@ -106,6 +107,33 @@ class TreesTestCase(unittest.TestCase):
         feat_names = ['no surfacing', 'flippers']
         decision_tree = {'no surfacing': {1: 'yes', 2: 'no'}}
         self.assertEqual(decision_tree, trees.create_tree(data, feat_names))
+
+    def test_classify(self):
+        """
+        Unittest for function classify.
+        :return: classification result.
+        """
+        # test 1: training data
+        item = [1, 0]
+        feat_names = ['no surfacing', 'flippers']
+        result = 'no'
+        decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.assertEqual(result, trees.classify(decision_tree, feat_names, item))
+
+        # test 2: training data with different feat_names
+        item = [0, 1]
+        feat_names = ['flippers', 'no surfacing']
+        result = 'no'
+        decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.assertEqual(result, trees.classify(decision_tree, feat_names, item))
+
+        # test 3: not training data
+        item = [0, 0]
+        feat_names = ['flippers', 'no surfacing']
+        result = 'no'
+        decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.assertEqual(result, trees.classify(decision_tree, feat_names, item))
+        pass
 
 
 if __name__ == "__main__":

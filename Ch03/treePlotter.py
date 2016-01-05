@@ -62,18 +62,18 @@ def plotTree(myTree, parentPt, nodeTxt):
     plotMidText(cntrPt, parentPt, nodeTxt)
     plotNode(firstStr, cntrPt, parentPt, decisionNode)
     secondDict = myTree[firstStr]
-    plotTree.yOff = plotTree.yOff - 1.0 / plotTree.totalD
+    plotTree.yOff -= 1.0 / plotTree.totalD
     for key in secondDict.keys():
         # test to see if the nodes are dictonaires, if not they are leaf nodes
         if type(secondDict[key]).__name__ == 'dict':
             plotTree(secondDict[key], cntrPt, str(key))  # recursion
         else:  # it's a leaf node print the leaf node
-            plotTree.xOff = plotTree.xOff + 1.0 / plotTree.totalW
+            plotTree.xOff += 1.0 / plotTree.totalW
             plotNode(secondDict[key],
                      (plotTree.xOff, plotTree.yOff),
                      cntrPt, leafNode)
             plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, str(key))
-    plotTree.yOff = plotTree.yOff + 1.0 / plotTree.totalD
+    plotTree.yOff += 1.0 / plotTree.totalD
 # if you do get a dictonary you know it's a tree, and the first element
 # will be another dict
 
@@ -104,8 +104,8 @@ def retrieveTree(i):
     listOfTrees = [{'no surfacing': {0: 'no',
                     1: {'flippers': {0: 'no', 1: 'yes'}}}},
                    {'no surfacing': {0: 'no',
-                    1: {'flippers': {0: {'head': {0: 'no', 1: 'yes'}},
-                     1: 'no'}}}}
+                                     1: dict(flippers={0: {'head': {0: 'no', 1: 'yes'}},
+                                                       1: 'no'})}}
                    ]
     return listOfTrees[i]
 
