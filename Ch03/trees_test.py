@@ -73,24 +73,20 @@ class TreesTestCase(unittest.TestCase):
         :return:
         """
         class_list = ['yes', 'no', 'no', 'yes']
-        majority_class = 'yes'
-        self.assertEqual(majority_class, trees.majority_class(class_list))
-
-        class_list = ['yes', 'no', 'no', 'yes', 'no']
-        majority_class = 'no'
-        self.assertEqual(majority_class, trees.majority_class(class_list))
+        majority_class = ['yes', 'no']
+        self.assertIn(trees.majority_class(class_list), majority_class)
 
         class_list = ['yes', 'no', 'no', 'yes', 'no']
         majority_class = 'no'
         self.assertEqual(majority_class, trees.majority_class(class_list))
 
         class_list = ['yes', 'no', 'no', 'yes', 'maybe']
-        majority_class = 'yes'
-        self.assertEqual(majority_class, trees.majority_class(class_list))
+        majority_class = ['yes', 'no']
+        self.assertIn(trees.majority_class(class_list), majority_class)
 
         class_list = ['yes', 'maybe', 'no', 'yes', 'maybe']
-        majority_class = 'maybe'
-        self.assertEqual(majority_class, trees.majority_class(class_list))
+        majority_class = ['yes', 'maybe']
+        self.assertIn(trees.majority_class(class_list), majority_class)
 
     def test_create_tree(self):
         """
