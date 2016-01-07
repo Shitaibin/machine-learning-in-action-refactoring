@@ -39,8 +39,8 @@ def calc_entropy(dataset):
 
 
 def split_dataset(dataset, axis, value):
-    """
-    Get subset, which dataset[axis] == value, and remove this axis.
+    """ Get subset, which dataset[axis] == value, and remove this axis.
+
     :param dataset: 2d list.
     :param axis: int, feature id.
     :param value: feature value.
@@ -57,6 +57,7 @@ def split_dataset(dataset, axis, value):
 
 def choose_best_feature_to_split(dataset):
     """
+
     :param dataset: 2d list.
     :return:
     """
@@ -83,8 +84,8 @@ def choose_best_feature_to_split(dataset):
 
 
 def majority_class(class_list):
-    """
-    Choose the majority class label.
+    """Choose the majority class label.
+
     P.S. If the two class have the same count. Choose the one appear in the latest.
     :rtype: string or int
     :param class_list:
@@ -103,8 +104,8 @@ def majority_class(class_list):
 
 
 def create_tree(dataset, feat_names):
-    """
-    Create decision tree.
+    """Create decision tree.
+
     :param dataset: 2d list.
     :param feat_names: targets
     :return: class label or dict of child tree.
@@ -124,8 +125,8 @@ def create_tree(dataset, feat_names):
 
 
 def splitting_tree(dataset, feat_names):
-    """
-    Splitting decision tree.
+    """Splitting decision tree.
+
     :param dataset:
     :param feat_names:
     :return:
@@ -143,8 +144,8 @@ def splitting_tree(dataset, feat_names):
 
 
 def classify(decision_tree, feat_names, test_date):
-    """
-    Using decision tree do classification.
+    """Using decision tree do classification.
+
     :param decision_tree: 
     :param feat_names: of test_data.
     :param test_date:

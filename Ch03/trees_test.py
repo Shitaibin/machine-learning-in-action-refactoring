@@ -11,8 +11,7 @@ import trees
 
 
 class TreesTestCase(unittest.TestCase):
-    """
-    Unittest for trees.py.
+    """Unittest for trees.py.
     """
 
     def test_calc_entropy(self):
@@ -58,8 +57,9 @@ class TreesTestCase(unittest.TestCase):
         data = [[1, 2, 'yes'],
                 [2, 3, 'no'],
                 [3, 3, 'no']]
-        best_feature = 0
-        self.assertEqual(best_feature, trees.choose_best_feature_to_split(data))
+        best_feature = [0, 1]
+        # self.assertEqual(best_feature, trees.choose_best_feature_to_split(data))
+        self.assertIn(trees.choose_best_feature_to_split(data), best_feature)
 
         # negative test
         # test 3, data is empty
@@ -67,8 +67,8 @@ class TreesTestCase(unittest.TestCase):
         self.assertRaises(IndexError, lambda: trees.choose_best_feature_to_split(data))
 
     def test_majority_class(self):
-        """
-        unittest for majority_class.
+        """Unittest for majority_class.
+
         :param self:
         :return:
         """
@@ -89,8 +89,8 @@ class TreesTestCase(unittest.TestCase):
         self.assertIn(trees.majority_class(class_list), majority_class)
 
     def test_create_tree(self):
-        """
-        Unittest for create tree.
+        """Unittest for create tree.
+
         :return:
         """
         data, feat_names = trees.create_dataset()
@@ -105,8 +105,8 @@ class TreesTestCase(unittest.TestCase):
         self.assertEqual(decision_tree, trees.create_tree(data, feat_names))
 
     def test_classify(self):
-        """
-        Unittest for function classify.
+        """Unittest for function classify.
+
         :return: classification result.
         """
         # test 1: training data
@@ -129,7 +129,6 @@ class TreesTestCase(unittest.TestCase):
         result = 'no'
         decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
         self.assertEqual(result, trees.classify(decision_tree, feat_names, item))
-        pass
 
 
 if __name__ == "__main__":
