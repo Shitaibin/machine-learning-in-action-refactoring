@@ -43,8 +43,12 @@ class DecisionTree():
         # way 2, adopt:iteration
         dataset = []
         for x, yy in zip(X, y):
-            x.append(yy)
-            dataset.append(x[:])
+            # way 1
+            # x.append(yy)
+            # dataset.append(x)
+
+            # way 2
+            dataset.append(x + [yy])
 
         # call create_tree and save result to self.tree
         self.tree = self.__create_tree__(dataset, feat_names)
@@ -66,6 +70,7 @@ class DecisionTree():
         y : array of shape = [n_samples] or [n_samples, n_outputs]
             The predicted classes.
         """
+        # TODO: predict refactoring
         decision_tree = self.tree
         # X is 1d, return the class label
         if not isinstance(X[0], list):
