@@ -7,5 +7,9 @@ Decision Tree Source Code
 
 class DecisionTree():
     # TODO: make it happen
-    pass
 
+    def fit(self, X, y):
+        pass
+
+    def predict(self, X, y):
+        pass
