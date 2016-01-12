@@ -32,6 +32,22 @@ class DecisionTree():
             Returns self.
         """
         # TODO: how to fit
+        # combine X,y to get dataset
+        # way 1, abandon: array to list, will make anything as string
+        # y_list = [[yy] for yy in y]
+        # y_array = np.asarray(y_list)
+        # X_array = np.asarray(X)
+        # dataset_array = np.hstack((X_array, y_array))
+        # dataset = dataset_array.tolist()
+
+        # way 2, adopt:iteration
+        dataset = []
+        for x, yy in zip(X, y):
+            x.append(yy)
+            dataset.append(x[:])
+
+        # call create_tree and save result to self.tree
+        self.tree = self.__create_tree__(dataset, feat_names)
 
     def predict(self, X, feat_names):
         """Predict class or regression value for X.
@@ -51,6 +67,8 @@ class DecisionTree():
             The predicted classes.
         """
         decision_tree = self.tree
+        # TODO: X is 1d
+        # TODO: X is 2d
         class_labels = []
         class_labels = [self.__classify__(decision_tree, feat_names, x) for x in X]
         return class_labels
@@ -151,7 +169,7 @@ class DecisionTree():
             return self.__majority_class__(class_list)
 
         # splitting
-        return self.__split_dataset__(dataset, feat_names)
+        return self.__splitting_tree__(dataset, feat_names)
 
     def __splitting_tree__(self, dataset, feat_names):
         """Splitting decision tree.

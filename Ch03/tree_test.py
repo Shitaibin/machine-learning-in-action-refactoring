@@ -12,6 +12,7 @@ from tree import DecisionTree
 class DecisionTreeTestCase(unittest.TestCase):
     """Unittest for tree.DecsionTree
     """
+
     # TODO: make a complete unittest
     def setUp(self):
         self.decision_tree = DecisionTree()
@@ -25,8 +26,15 @@ class DecisionTreeTestCase(unittest.TestCase):
                    [1, 0, 'no'],
                    [0, 1, 'no'],
                    [0, 1, 'no']]
+        X = [[1, 1],
+             [1, 1],
+             [1, 0],
+             [0, 1],
+             [0, 1]]
+        y = ["yes", "yes", "no", "no", "no"]
         feat_names = ['no surfacing', 'flippers']
         decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.decision_tree.fit(X, y, feat_names)
         self.assertEqual(self.decision_tree.tree, decision_tree)
 
     def test_predict(self):
@@ -45,6 +53,7 @@ class DecisionTreeTestCase(unittest.TestCase):
         decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
         self.decision_tree.tree = decision_tree
         self.assertEqual(result, self.decision_tree.predict(dataset, feat_names))
+
 
 if __name__ == "__main__":
     unittest.main()
