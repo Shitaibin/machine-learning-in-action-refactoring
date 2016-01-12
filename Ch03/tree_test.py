@@ -13,7 +13,6 @@ class DecisionTreeTestCase(unittest.TestCase):
     """Unittest for tree.DecsionTree
     """
 
-    # TODO: make a complete unittest
     def setUp(self):
         self.decision_tree = DecisionTree()
 
@@ -43,6 +42,7 @@ class DecisionTreeTestCase(unittest.TestCase):
         feat_names = ['no surfacing', 'flippers']
         result = 'no'
         decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+        self.decision_tree.tree = decision_tree
         self.assertEqual(result, self.decision_tree.predict(item, feat_names))
 
         # test 2: training data with different feat_names

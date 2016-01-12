@@ -31,7 +31,7 @@ class DecisionTree():
         self : object
             Returns self.
         """
-        # TODO: how to fit
+        # TODO: refactor fit
         # combine X,y to get dataset
         # way 1, abandon: array to list, will make anything as string
         # y_list = [[yy] for yy in y]
@@ -67,10 +67,12 @@ class DecisionTree():
             The predicted classes.
         """
         decision_tree = self.tree
-        # TODO: X is 1d
-        # TODO: X is 2d
+        # X is 1d, return the class label
+        if not isinstance(X[0], list):
+            return self.__classify__(self.tree, feat_names, X)
+        # X is 2d, return a list of class labels
         class_labels = []
-        class_labels = [self.__classify__(decision_tree, feat_names, x) for x in X]
+        class_labels = [self.__classify__(self.tree, feat_names, x) for x in X]
         return class_labels
 
     def __calc_entropy__(self, dataset):
