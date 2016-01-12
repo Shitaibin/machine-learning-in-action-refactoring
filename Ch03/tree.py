@@ -31,7 +31,6 @@ class DecisionTree():
         self : object
             Returns self.
         """
-        # TODO: refactor fit
         # combine X,y to get dataset
         # way 1, abandon: array to list, will make anything as string
         # y_list = [[yy] for yy in y]
@@ -70,15 +69,12 @@ class DecisionTree():
         y : array of shape = [n_samples] or [n_samples, n_outputs]
             The predicted classes.
         """
-        # TODO: predict refactoring
-        decision_tree = self.tree
         # X is 1d, return the class label
         if not isinstance(X[0], list):
             return self.__classify__(self.tree, feat_names, X)
+
         # X is 2d, return a list of class labels
-        class_labels = []
-        class_labels = [self.__classify__(self.tree, feat_names, x) for x in X]
-        return class_labels
+        return [self.__classify__(self.tree, feat_names, x) for x in X]
 
     def __calc_entropy__(self, dataset):
         n_entries = len(dataset)
