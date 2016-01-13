@@ -59,5 +59,23 @@ class DecisionTreeTestCase(unittest.TestCase):
         self.assertEqual(result, self.decision_tree.predict(dataset, feat_names))
 
 
+class DecisionTreeC45TestCase(unittest.TestCase):
+    """
+
+    """
+
+    def setUp(self):
+        self.decision_tree = DecisionTree("c45")
+
+    def tearDown(self):
+        self.decision_tree = None
+
+    def test_fit(self):
+        pass
+
+    def test_predict(self):
+        pass
+
+
 if __name__ == "__main__":
     unittest.main()
