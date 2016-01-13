@@ -65,15 +65,34 @@ class DecisionTreeC45TestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.decision_tree = DecisionTree("c45")
+        self.decision_tree = DecisionTree("c4.5")
 
     def tearDown(self):
         self.decision_tree = None
 
     def test_fit(self):
-        pass
+        # TODO : fill decision_tree
+        # test data
+        X = [[1, 1],
+             [1, 1],
+             [1, 0],
+             [0, 1],
+             [0, 1]]
+        y = ["yes", "yes", "no", "no", "no"]
+        # X and y is list object
+        feat_names = ['no surfacing', 'flippers']
+        decision_tree = {}
+        self.decision_tree.fit(X, y, feat_names)
+        self.assertEqual(self.decision_tree.tree, decision_tree)
+
+        # X and y is array
+        feat_names = ['no surfacing', 'flippers']
+        self.decision_tree.fit(np.asarray(X), np.asarray(y), feat_names)
+        self.assertEqual(self.decision_tree.tree, decision_tree)
 
     def test_predict(self):
+        # There is no need to test predict.
+        # Because, predict is not about criterion, in test_predict.
         pass
 
 
