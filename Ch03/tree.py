@@ -17,6 +17,7 @@ class DecisionTree:
         self.n_features_ = None
         self.tree = {}
         self.criterion = criterion
+        self.__criterion_dict__ = {"id3": self.__choose_by_id3__, "c4.5": self.__choose_by_c45__}
 
     def fit(self, X, y, feat_names):
         """Build a decision tree from the training set(X, y)
@@ -123,10 +124,14 @@ class DecisionTree:
         :param dataset: 2d list.
         :return:
         """
-        if self.criterion == "id3":
-            return self.__choose_by_id3__(dataset)
-        else:
-            return self.__choose_by_c45__(dataset)
+        # way1: normal
+        # if self.criterion == "id3":
+        #     return self.__choose_by_id3__(dataset)
+        # else:
+        #     return self.__choose_by_c45__(dataset)
+
+        # way2: Pythonic
+        return self.__criterion_dict__.get(self.criterion)(dataset)
 
     def __choose_by_c45__(self, dataset):
         """Choose best feature by information gain ratio.
@@ -158,6 +163,11 @@ class DecisionTree:
         return best_feature  # returns an integer
 
     def __choose_by_id3__(self, dataset):
+        """Choose best feature by information gain.
+
+        :param dataset:
+        :return:
+        """
         n_features = len(dataset[0]) - 1  # the last column is used for the labels
         base_entropy = self.__calc_entropy__(dataset)
         best_info_gain = 0.0
