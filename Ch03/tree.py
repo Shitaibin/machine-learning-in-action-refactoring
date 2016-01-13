@@ -9,13 +9,14 @@ from math import log
 import numpy as np
 
 
-class DecisionTree():
+class DecisionTree:
     """A decision tree classifier.
     """
 
-    def __init__(self):
+    def __init__(self, criterion="id3"):
         self.n_features_ = None
         self.tree = {}
+        self.criterion = criterion
 
     def fit(self, X, y, feat_names):
         """Build a decision tree from the training set(X, y)
@@ -193,7 +194,10 @@ class DecisionTree():
         :param feat_names:
         :return:
         """
-        best_feat = self.__choose_best_feature_to_split__(dataset)
+        if self.criterion == "id3":
+            best_feat = self.__choose_best_feature_to_split__(dataset)
+        else:
+            best_feat = None
         best_feat_name = feat_names[best_feat]
         decision_tree = {best_feat_name: {}}
         del (feat_names[best_feat])
