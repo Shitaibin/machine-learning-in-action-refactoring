@@ -126,28 +126,36 @@ class DecisionTree:
         if self.criterion == "id3":
             return self.__choose_by_id3__(dataset)
         else:
-            n_features = len(dataset[0]) - 1  # the last column is used for the labels
-            base_entropy = self.__calc_entropy__(dataset)
-            best_info_gain_ratio = 0.0
-            best_feature = -1
-            for i in range(n_features):  # iterate over all the features
-                # get a set of unique values
-                feat_unique_vals = set([item[i] for item in dataset])
-                new_entropy = 0.0
-                split_info = 0.0
-                for value in feat_unique_vals:
-                    subset = self.__split_dataset__(dataset, i, value)
-                    prob = len(subset) / float(len(dataset))
-                    new_entropy += prob * self.__calc_entropy__(subset)
-                    split_info -= prob * log(prob, 2)
-                # calculate the info gain; ie reduction in entropy
-                info_gain = base_entropy - new_entropy
-                info_gain_ratio = info_gain / split_info
+            return self.__choose_by_c45__(dataset)
 
-                if info_gain_ratio > best_info_gain_ratio:  # compare this to the best gain so far
-                    best_info_gain_ratio = info_gain_ratio  # if better than current best, set to best
-                    best_feature = i
-            return best_feature  # returns an integer
+    def __choose_by_c45__(self, dataset):
+        """Choose best feature by information gain ratio.
+
+        :param dataset:
+        :return:
+        """
+        n_features = len(dataset[0]) - 1  # the last column is used for the labels
+        base_entropy = self.__calc_entropy__(dataset)
+        best_info_gain_ratio = 0.0
+        best_feature = -1
+        for i in range(n_features):  # iterate over all the features
+            # get a set of unique values
+            feat_unique_vals = set([item[i] for item in dataset])
+            new_entropy = 0.0
+            split_info = 0.0
+            for value in feat_unique_vals:
+                subset = self.__split_dataset__(dataset, i, value)
+                prob = len(subset) / float(len(dataset))
+                new_entropy += prob * self.__calc_entropy__(subset)
+                split_info -= prob * log(prob, 2)
+            # calculate the info gain; ie reduction in entropy
+            info_gain = base_entropy - new_entropy
+            info_gain_ratio = info_gain / split_info
+
+            if info_gain_ratio > best_info_gain_ratio:  # compare this to the best gain so far
+                best_info_gain_ratio = info_gain_ratio  # if better than current best, set to best
+                best_feature = i
+        return best_feature  # returns an integer
 
     def __choose_by_id3__(self, dataset):
         n_features = len(dataset[0]) - 1  # the last column is used for the labels
