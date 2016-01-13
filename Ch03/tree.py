@@ -164,8 +164,7 @@ class DecisionTree():
         # return sorted_class_count[0][0]
 
         # v3
-        count = Counter(class_list)
-        return count.keys()[0]
+        return Counter(class_list).keys()[0]
 
     def __create_tree__(self, dataset, feat_names):
         """Create decision tree.
