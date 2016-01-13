@@ -123,6 +123,12 @@ class DecisionTree:
         :param dataset: 2d list.
         :return:
         """
+        if self.criterion == "id3":
+            return self.__choose_by_id3__(dataset)
+        else:
+            return None
+
+    def __choose_by_id3__(self, dataset):
         n_features = len(dataset[0]) - 1  # the last column is used for the labels
         base_entropy = self.__calc_entropy__(dataset)
         best_info_gain = 0.0
@@ -141,7 +147,6 @@ class DecisionTree:
             if info_gain > best_info_gain:  # compare this to the best gain so far
                 best_info_gain = info_gain  # if better than current best, set to best
                 best_feature = i
-
         return best_feature  # returns an integer
 
     def __majority_class__(self, class_list):
@@ -194,10 +199,7 @@ class DecisionTree:
         :param feat_names:
         :return:
         """
-        if self.criterion == "id3":
-            best_feat = self.__choose_best_feature_to_split__(dataset)
-        else:
-            best_feat = None
+        best_feat = self.__choose_best_feature_to_split__(dataset)
         best_feat_name = feat_names[best_feat]
         decision_tree = {best_feat_name: {}}
         del (feat_names[best_feat])
