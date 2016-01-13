@@ -6,6 +6,8 @@ Decision Tree Source Code
 import operator
 from math import log
 
+import numpy as np
+
 
 class DecisionTree():
     """A decision tree classifier.
@@ -38,6 +40,12 @@ class DecisionTree():
         # X_array = np.asarray(X)
         # dataset_array = np.hstack((X_array, y_array))
         # dataset = dataset_array.tolist()
+
+        # X or y is array
+        if isinstance(X, np.ndarray):
+            X = X.tolist()
+        if isinstance(y, np.ndarray):
+            y = y.tolist()
 
         # way 2, adopt:iteration
         dataset = []
@@ -211,4 +219,3 @@ class DecisionTree():
         else:
             class_label = classify_result
         return class_label
-
