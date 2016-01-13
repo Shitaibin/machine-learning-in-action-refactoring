@@ -6,6 +6,8 @@ Decision Tree Unittest Source Code for tree.py.
 
 import unittest
 
+import numpy as np
+
 from tree import DecisionTree
 
 
@@ -20,6 +22,7 @@ class DecisionTreeTestCase(unittest.TestCase):
         self.decision_tree = None
 
     def test_fit(self):
+        # X and y is list object
         dataset = [[1, 1, 'yes'],
                    [1, 1, 'yes'],
                    [1, 0, 'no'],
@@ -34,6 +37,10 @@ class DecisionTreeTestCase(unittest.TestCase):
         feat_names = ['no surfacing', 'flippers']
         decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
         self.decision_tree.fit(X, y, feat_names)
+        self.assertEqual(self.decision_tree.tree, decision_tree)
+
+        # X and y is array
+        self.decision_tree.fit(np.asarray(X), np.asarray(y), feat_names)
         self.assertEqual(self.decision_tree.tree, decision_tree)
 
     def test_predict(self):
