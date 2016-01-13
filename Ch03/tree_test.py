@@ -71,7 +71,6 @@ class DecisionTreeC45TestCase(unittest.TestCase):
         self.decision_tree = None
 
     def test_fit(self):
-        # TODO : fill decision_tree
         # test data
         X = [[1, 1],
              [1, 1],
@@ -81,7 +80,7 @@ class DecisionTreeC45TestCase(unittest.TestCase):
         y = ["yes", "yes", "no", "no", "no"]
         # X and y is list object
         feat_names = ['no surfacing', 'flippers']
-        decision_tree = {}
+        decision_tree = {'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
         self.decision_tree.fit(X, y, feat_names)
         self.assertEqual(self.decision_tree.tree, decision_tree)
 
