@@ -3,7 +3,7 @@ Created on Jan 7, 2016
 Decision Tree Source Code
 @author: Shitaibin
 """
-import operator
+from collections import Counter
 from math import log
 
 import numpy as np
@@ -146,21 +146,26 @@ class DecisionTree():
     def __majority_class__(self, class_list):
         """Choose the majority class label.
 
-        P.S. If the two class have the same count. Choose the one appear in the latest.
+        P.S. If the two class have the same count. Choose any one is okay.
         :rtype: string or int
         :param class_list:
         :return:
         """
-        class_count = {}
-        for vote in class_list:
-            if vote not in class_count.keys():
-                class_count[vote] = 0
-            class_count[vote] += 1
+        # v2
+        # class_count = {}
+        # for vote in class_list:
+        #     if vote not in class_count.keys():
+        #         class_count[vote] = 0
+        #     class_count[vote] += 1
+        #
+        # sorted_class_count = sorted(class_count.iteritems(),
+        #                             key=operator.itemgetter(1),
+        #                             reverse=True)
+        # return sorted_class_count[0][0]
 
-        sorted_class_count = sorted(class_count.iteritems(),
-                                    key=operator.itemgetter(1),
-                                    reverse=True)
-        return sorted_class_count[0][0]
+        # v3
+        count = Counter(class_list)
+        return count.keys()[0]
 
     def __create_tree__(self, dataset, feat_names):
         """Create decision tree.
