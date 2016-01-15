@@ -54,12 +54,12 @@ class DecisionTree:
         dataset = []
         for x, yy in zip(X, y):
             # way 1: easy to read
-            # TODO: bug, should not change x
-            # x.append(yy)
-            # dataset.append(x[:])
+            x_copy = x[:]  # should not change x
+            x_copy.append(yy)
+            dataset.append(x_copy[:])
 
             # way 2: not easy to read
-            dataset.append(x + [yy])
+            # dataset.append(x + [yy])
 
         # call create_tree and save result to self.tree
         self.tree = self.__create_tree__(dataset, feat_names)
