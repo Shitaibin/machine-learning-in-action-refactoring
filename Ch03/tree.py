@@ -17,7 +17,8 @@ class DecisionTree:
         self.n_features_ = None
         self.tree = {}
         self.criterion = criterion
-        self.__criterion_dict__ = {"id3": self.__choose_by_id3__, "c4.5": self.__choose_by_c45__}
+        self.__criterion_method_dict__ = {"id3": self.__choose_by_id3__,
+                                          "c4.5": self.__choose_by_c45__}
 
     def fit(self, X, y, feat_names):
         """Build a decision tree from the training set(X, y)
@@ -52,11 +53,12 @@ class DecisionTree:
         # way 2, adopt:iteration
         dataset = []
         for x, yy in zip(X, y):
-            # way 1
+            # way 1: easy to read
+            # TODO: bug, should not change x
             # x.append(yy)
-            # dataset.append(x)
+            # dataset.append(x[:])
 
-            # way 2
+            # way 2: not easy to read
             dataset.append(x + [yy])
 
         # call create_tree and save result to self.tree
@@ -79,22 +81,25 @@ class DecisionTree:
         y : array of shape = [n_samples] or [n_samples, n_outputs]
             The predicted classes.
         """
-        # X is 1d, return the class label
-        if not isinstance(X[0], list):
+        # X is a list of x, return a list of class labels
+        if isinstance(X[0], list):
+            return [self.__classify__(self.tree, feat_names, x) for x in X]
+        else:
+            # X is x, return the class label
             return self.__classify__(self.tree, feat_names, X)
-
-        # X is 2d, return a list of class labels
-        return [self.__classify__(self.tree, feat_names, x) for x in X]
 
     def __calc_entropy__(self, dataset):
         n_entries = len(dataset)
-        label_counts = {}
-        # the the number of unique elements and their occurance
-        for feat_vec in dataset:
-            label = feat_vec[-1]
-            if label not in label_counts.keys():
-                label_counts[label] = 0
-            label_counts[label] += 1
+        # the the number of unique elements and their occurrence
+        # label_counts = {}
+        # for feat_vec in dataset:
+        #     label = feat_vec[-1]
+        #     if label not in label_counts.keys():
+        #         label_counts[label] = 0
+        #     label_counts[label] += 1
+
+        labels = [item[-1] for item in dataset]
+        label_counts = Counter(labels)
 
         shannon_entropy = 0.0
         for label in label_counts:
@@ -102,7 +107,7 @@ class DecisionTree:
             shannon_entropy -= prob * log(prob, 2)  # log base 2
         return shannon_entropy
 
-    def __split_dataset__(self, dataset, axis, value):
+    def __get_dataset__(self, dataset, axis, value):
         """ Get subset, which dataset[axis] == value, and remove this axis.
 
         :param dataset: 2d list.
@@ -131,7 +136,7 @@ class DecisionTree:
         #     return self.__choose_by_c45__(dataset)
 
         # way2: Pythonic
-        return self.__criterion_dict__.get(self.criterion)(dataset)
+        return self.__criterion_method_dict__.get(self.criterion)(dataset)
 
     def __choose_by_c45__(self, dataset):
         """Choose best feature by information gain ratio.
@@ -149,7 +154,7 @@ class DecisionTree:
             new_entropy = 0.0
             split_info = 0.0
             for value in feat_unique_vals:
-                subset = self.__split_dataset__(dataset, i, value)
+                subset = self.__get_dataset__(dataset, i, value)
                 prob = len(subset) / float(len(dataset))
                 new_entropy += prob * self.__calc_entropy__(subset)
                 split_info -= prob * log(prob, 2)
@@ -177,7 +182,7 @@ class DecisionTree:
             feat_unique_vals = set([item[i] for item in dataset])
             new_entropy = 0.0
             for value in feat_unique_vals:
-                subset = self.__split_dataset__(dataset, i, value)
+                subset = self.__get_dataset__(dataset, i, value)
                 prob = len(subset) / float(len(dataset))
                 new_entropy += prob * self.__calc_entropy__(subset)
             # calculate the info gain; ie reduction in entropy
@@ -231,40 +236,40 @@ class DecisionTree:
         # splitting
         return self.__splitting_tree__(dataset, feat_names)
 
-    def __splitting_tree__(self, dataset, feat_names):
+    def __splitting_tree__(self, dataset, feature_names):
         """Splitting decision tree.
 
         :param dataset:
-        :param feat_names:
+        :param feature_names:
         :return:
         """
-        best_feat = self.__choose_best_feature_to_split__(dataset)
-        best_feat_name = feat_names[best_feat]
+        best_feature = self.__choose_best_feature_to_split__(dataset)
+        best_feat_name = feature_names[best_feature]
         decision_tree = {best_feat_name: {}}
-        del (feat_names[best_feat])
-        feat_unique_vals = set([item[best_feat] for item in dataset])
+        del (feature_names[best_feature])
+        feat_unique_vals = set([item[best_feature] for item in dataset])
         for value in feat_unique_vals:
             # copy all of labels, so trees don't mess up existing labels
             decision_tree[best_feat_name][value] = self.__create_tree__(
-                    self.__split_dataset__(dataset, best_feat, value), feat_names[:])
+                    self.__get_dataset__(dataset, best_feature, value), feature_names[:])
         return decision_tree
 
-    def __classify__(self, decision_tree, feat_names, test_date):
+    def __classify__(self, decision_tree, feature_names, test_date):
         """Using decision tree do classification.
 
         :param decision_tree:
-        :param feat_names: of test_data.
+        :param feature_names: of test_data.
         :param test_date:
         :return:
         """
 
-        current_classify_feat = decision_tree.keys()[0]
-        child_decision_tree = decision_tree[current_classify_feat]
-        feat_index = feat_names.index(current_classify_feat)
-        feat_val = test_date[feat_index]
-        classify_result = child_decision_tree[feat_val]
-        if isinstance(classify_result, dict):  # not a leaf node.
-            class_label = self.__classify__(classify_result, feat_names, test_date)
+        current_feature = decision_tree.keys()[0]
+        child_decision_tree = decision_tree[current_feature]
+        feature_index = feature_names.index(current_feature)
+        feature_val = test_date[feature_index]
+        classify_result = child_decision_tree[feature_val]
+        if isinstance(classify_result, dict):  # classify in child tree
+            class_label = self.__classify__(classify_result, feature_names, test_date)
         else:
             class_label = classify_result
         return class_label
