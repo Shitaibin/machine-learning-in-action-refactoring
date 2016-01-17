@@ -77,7 +77,7 @@ def binary_kmeans(dataset, k, get_distance=distance):
             points_in_cluster = dataset[nonzero(cluster_assignment[:, 0].A == i)[0],
                                 :]  # get the data points currently in cluster i
             centroid_matrix, split_cluster_assignment = kmeans(points_in_cluster, 2, get_distance)
-            sse_split = sum(split_cluster_assignment[:, 1])  # compare the SSE to the currrent minimum
+            sse_split = sum(split_cluster_assignment[:, 1])  # compare the SSE to the current minimum
             sse_not_split = sum(cluster_assignment[nonzero(cluster_assignment[:, 0].A != i)[0], 1])
             print "sse_split, and notSplit: ", sse_split, sse_not_split
             if (sse_split + sse_not_split) < lowest_SSE:
@@ -98,29 +98,29 @@ def binary_kmeans(dataset, k, get_distance=distance):
     return mat(centroids_list), cluster_assignment
 
 
-def load_geography_data(stAddress, city):
-    apiStem = 'http://where.yahooapis.com/geocode?'  # create a dict and constants for the goecoder
+def load_geography_data(station_address, city):
+    api_stem = 'http://where.yahooapis.com/geocode?'  # create a dict and constants for the goecoder
     params = {}
     params['flags'] = 'J'  # JSON return type
     params['appid'] = 'aaa0VN6k'
-    params['location'] = '%s %s' % (stAddress, city)
+    params['location'] = '%s %s' % (station_address, city)
     url_params = urllib.urlencode(params)
-    yahooApi = apiStem + url_params  # print url_params
-    print yahooApi
-    c = urllib.urlopen(yahooApi)
+    yahoo_api = api_stem + url_params  # print url_params
+    print yahoo_api
+    c = urllib.urlopen(yahoo_api)
     return json.loads(c.read())
 
 
-def mass_place_find(fileName):
+def mass_place_find(file_name):
     fw = open('places.txt', 'w')
-    for line in open(fileName).readlines():
+    for line in open(file_name).readlines():
         line = line.strip()
-        lineArr = line.split('\t')
-        retDict = load_geography_data(lineArr[1], lineArr[2])
-        if retDict['ResultSet']['Error'] == 0:
-            lat = float(retDict['ResultSet']['Results'][0]['latitude'])
-            lng = float(retDict['ResultSet']['Results'][0]['longitude'])
-            print "%s\t%f\t%f" % (lineArr[0], lat, lng)
+        line_feature = line.split('\t')
+        ret_dict = load_geography_data(line_feature[1], line_feature[2])
+        if ret_dict['ResultSet']['Error'] == 0:
+            lat = float(ret_dict['ResultSet']['Results'][0]['latitude'])
+            lng = float(ret_dict['ResultSet']['Results'][0]['longitude'])
+            print "%s\t%f\t%f" % (line_feature[0], lat, lng)
             fw.write('%s\t%f\t%f\n' % (line, lat, lng))
         else:
             print "error fetching"
@@ -128,33 +128,33 @@ def mass_place_find(fileName):
     fw.close()
 
 
-def SLC_distance(vecA, vecB):  # Spherical Law of Cosines
-    a = sin(vecA[0, 1] * pi / 180) * sin(vecB[0, 1] * pi / 180)
-    b = cos(vecA[0, 1] * pi / 180) * cos(vecB[0, 1] * pi / 180) * \
-        cos(pi * (vecB[0, 0] - vecA[0, 0]) / 180)
+def SLC_distance(vector_x, vector_y):  # Spherical Law of Cosines
+    a = sin(vector_x[0, 1] * pi / 180) * sin(vector_y[0, 1] * pi / 180)
+    b = cos(vector_x[0, 1] * pi / 180) * cos(vector_y[0, 1] * pi / 180) * \
+        cos(pi * (vector_y[0, 0] - vector_x[0, 0]) / 180)
     return arccos(a + b) * 6371.0  # pi is imported with numpy
 
 
-def cluster_clubs(numClust=5):
-    datList = []
+def cluster_clubs(n_cluster=5):
+    data_list = []
     for line in open('places.txt').readlines():
-        lineArr = line.split('\t')
-        datList.append([float(lineArr[4]), float(lineArr[3])])
-    datMat = mat(datList)
-    myCentroids, clustAssing = binary_kmeans(datMat, numClust, get_distance=SLC_distance)
+        line_feature = line.split('\t')
+        data_list.append([float(line_feature[4]), float(line_feature[3])])
+    data_matrix = mat(data_list)
+    my_centroids, clust_assignment = binary_kmeans(data_matrix, n_cluster, get_distance=SLC_distance)
     fig = plt.figure()
     rect = [0.1, 0.1, 0.8, 0.8]
-    scatterMarkers = ['s', 'o', '^', '8', 'p', \
-                      'd', 'v', 'h', '>', '<']
+    scatter_markers = ['s', 'o', '^', '8', 'p', \
+                       'd', 'v', 'h', '>', '<']
     axprops = dict(xticks=[], yticks=[])
     ax0 = fig.add_axes(rect, label='ax0', **axprops)
-    imgP = plt.imread('Portland.png')
-    ax0.imshow(imgP)
+    image = plt.imread('Portland.png')
+    ax0.imshow(image)
     ax1 = fig.add_axes(rect, label='ax1', frameon=False)
-    for i in range(numClust):
-        ptsInCurrCluster = datMat[nonzero(clustAssing[:, 0].A == i)[0], :]
-        markerStyle = scatterMarkers[i % len(scatterMarkers)]
-        ax1.scatter(ptsInCurrCluster[:, 0].flatten().A[0], ptsInCurrCluster[:, 1].flatten().A[0], marker=markerStyle,
+    for i in range(n_cluster):
+        points_in_cluster = data_matrix[nonzero(clust_assignment[:, 0].A == i)[0], :]
+        marker_style = scatter_markers[i % len(scatter_markers)]
+        ax1.scatter(points_in_cluster[:, 0].flatten().A[0], points_in_cluster[:, 1].flatten().A[0], marker=marker_style,
                     s=90)
-    ax1.scatter(myCentroids[:, 0].flatten().A[0], myCentroids[:, 1].flatten().A[0], marker='+', s=300)
+    ax1.scatter(my_centroids[:, 0].flatten().A[0], my_centroids[:, 1].flatten().A[0], marker='+', s=300)
     plt.show()
