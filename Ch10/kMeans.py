@@ -12,85 +12,90 @@ import matplotlib.pyplot as plt
 from numpy import *
 
 
-def load_dataset(fileName):  # general function to parse tab -delimited floats
-    dataMat = []  # assume last column is target value
-    fr = open(fileName)
+# TODO: optimize numpy import
+
+def load_dataset(file_name):  # general function to parse tab -delimited floats
+    data_matrix = []  # assume last column is target value
+    fr = open(file_name)
     for line in fr.readlines():
-        curLine = line.strip().split('\t')
-        fltLine = map(float, curLine)  # map all elements to float()
-        dataMat.append(fltLine)
-    return dataMat
+        current_line = line.strip().split('\t')
+        float_line = map(float, current_line)  # map all elements to float()
+        data_matrix.append(float_line)
+    return data_matrix
 
 
-def distance(vecA, vecB):
-    return sqrt(sum(power(vecA - vecB, 2)))  # la.norm(vecA-vecB)
+def distance(vector_x, vector_b):
+    return sqrt(sum(power(vector_x - vector_b, 2)))  # la.norm(vector_x-vector_b)
 
 
-def get_centroids(dataSet, k):
-    n = shape(dataSet)[1]
+def get_centroids(dataset, k):
+    n = shape(dataset)[1]
     centroids = mat(zeros((k, n)))  # create centroid mat
     for j in range(n):  # create random cluster centers, within bounds of each dimension
-        minJ = min(dataSet[:, j])
-        rangeJ = float(max(dataSet[:, j]) - minJ)
-        centroids[:, j] = mat(minJ + rangeJ * random.rand(k, 1))
+        min_j = min(dataset[:, j])
+        range_j = float(max(dataset[:, j]) - min_j)
+        centroids[:, j] = mat(min_j + range_j * random.rand(k, 1))
     return centroids
 
 
-def kMeans(dataSet, k, distMeas=distance, createCent=get_centroids):
-    m = shape(dataSet)[0]
-    clusterAssment = mat(zeros((m, 2)))  # create mat to assign data points
+def kmeans(dataset, k, get_distance=distance, create_centroids=get_centroids):
+    m = shape(dataset)[0]
+    cluster_assignment = mat(zeros((m, 2)))  # create mat to assign data points
     # to a centroid, also holds SE of each point
-    centroids = createCent(dataSet, k)
-    clusterChanged = True
-    while clusterChanged:
-        clusterChanged = False
+    centroids = create_centroids(dataset, k)
+    cluster_changed = True
+    while cluster_changed:
+        cluster_changed = False
         for i in range(m):  # for each data point assign it to the closest centroid
-            minDist = inf;
-            minIndex = -1
+            min_distance = inf
+            min_index = -1
             for j in range(k):
-                distJI = distMeas(centroids[j, :], dataSet[i, :])
-                if distJI < minDist:
-                    minDist = distJI;
-                    minIndex = j
-            if clusterAssment[i, 0] != minIndex: clusterChanged = True
-            clusterAssment[i, :] = minIndex, minDist ** 2
+                distance_i_j = get_distance(centroids[j, :], dataset[i, :])
+                if distance_i_j < min_distance:
+                    min_distance = distance_i_j
+                    min_index = j
+            if cluster_assignment[i, 0] != min_index: cluster_changed = True
+            cluster_assignment[i, :] = min_index, min_distance ** 2
         print centroids
         for cent in range(k):  # recalculate centroids
-            ptsInClust = dataSet[nonzero(clusterAssment[:, 0].A == cent)[0]]  # get all the point in this cluster
-            centroids[cent, :] = mean(ptsInClust, axis=0)  # assign centroid to mean
-    return centroids, clusterAssment
+            points_in_cluster = dataset[
+                nonzero(cluster_assignment[:, 0].A == cent)[0]]  # get all the point in this cluster
+            centroids[cent, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
+    return centroids, cluster_assignment
 
 
-def biKmeans(dataSet, k, distMeas=distance):
-    m = shape(dataSet)[0]
-    clusterAssment = mat(zeros((m, 2)))
-    centroid0 = mean(dataSet, axis=0).tolist()[0]
-    centList = [centroid0]  # create a list with one centroid
+def binary_kmeans(dataset, k, get_distance=distance):
+    m = shape(dataset)[0]
+    cluster_assignment = mat(zeros((m, 2)))
+    centroid0 = mean(dataset, axis=0).tolist()[0]
+    centroids_list = [centroid0]  # create a list with one centroid
     for j in range(m):  # calc initial Error
-        clusterAssment[j, 1] = distMeas(mat(centroid0), dataSet[j, :]) ** 2
-    while (len(centList) < k):
-        lowestSSE = inf
-        for i in range(len(centList)):
-            ptsInCurrCluster = dataSet[nonzero(clusterAssment[:, 0].A == i)[0],
-                               :]  # get the data points currently in cluster i
-            centroidMat, splitClustAss = kMeans(ptsInCurrCluster, 2, distMeas)
-            sseSplit = sum(splitClustAss[:, 1])  # compare the SSE to the currrent minimum
-            sseNotSplit = sum(clusterAssment[nonzero(clusterAssment[:, 0].A != i)[0], 1])
-            print "sseSplit, and notSplit: ", sseSplit, sseNotSplit
-            if (sseSplit + sseNotSplit) < lowestSSE:
-                bestCentToSplit = i
-                bestNewCents = centroidMat
-                bestClustAss = splitClustAss.copy()
-                lowestSSE = sseSplit + sseNotSplit
-        bestClustAss[nonzero(bestClustAss[:, 0].A == 1)[0], 0] = len(centList)  # change 1 to 3,4, or whatever
-        bestClustAss[nonzero(bestClustAss[:, 0].A == 0)[0], 0] = bestCentToSplit
-        print 'the bestCentToSplit is: ', bestCentToSplit
-        print 'the len of bestClustAss is: ', len(bestClustAss)
-        centList[bestCentToSplit] = bestNewCents[0, :].tolist()[0]  # replace a centroid with two best centroids
-        centList.append(bestNewCents[1, :].tolist()[0])
-        clusterAssment[nonzero(clusterAssment[:, 0].A == bestCentToSplit)[0],
-        :] = bestClustAss  # reassign new clusters, and SSE
-    return mat(centList), clusterAssment
+        cluster_assignment[j, 1] = get_distance(mat(centroid0), dataset[j, :]) ** 2
+    while len(centroids_list) < k:
+        lowest_SSE = inf
+        for i in range(len(centroids_list)):
+            points_in_cluster = dataset[nonzero(cluster_assignment[:, 0].A == i)[0],
+                                :]  # get the data points currently in cluster i
+            centroid_matrix, split_cluster_assignment = kmeans(points_in_cluster, 2, get_distance)
+            sse_split = sum(split_cluster_assignment[:, 1])  # compare the SSE to the currrent minimum
+            sse_not_split = sum(cluster_assignment[nonzero(cluster_assignment[:, 0].A != i)[0], 1])
+            print "sse_split, and notSplit: ", sse_split, sse_not_split
+            if (sse_split + sse_not_split) < lowest_SSE:
+                best_centroid = i
+                best_new_centroid = centroid_matrix
+                best_cluster_assignment = split_cluster_assignment.copy()
+                lowest_SSE = sse_split + sse_not_split
+        best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 1)[0], 0] = len(
+            centroids_list)  # change 1 to 3,4, or whatever
+        best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 0)[0], 0] = best_centroid
+        print 'the best_centroid is: ', best_centroid
+        print 'the len of best_cluster_assignment is: ', len(best_cluster_assignment)
+        centroids_list[best_centroid] = best_new_centroid[0, :].tolist()[
+            0]  # replace a centroid with two best centroids
+        centroids_list.append(best_new_centroid[1, :].tolist()[0])
+        cluster_assignment[nonzero(cluster_assignment[:, 0].A == best_centroid)[0],
+        :] = best_cluster_assignment  # reassign new clusters, and SSE
+    return mat(centroids_list), cluster_assignment
 
 
 def load_geography_data(stAddress, city):
@@ -136,7 +141,7 @@ def cluster_clubs(numClust=5):
         lineArr = line.split('\t')
         datList.append([float(lineArr[4]), float(lineArr[3])])
     datMat = mat(datList)
-    myCentroids, clustAssing = biKmeans(datMat, numClust, distMeas=SLC_distance)
+    myCentroids, clustAssing = binary_kmeans(datMat, numClust, get_distance=SLC_distance)
     fig = plt.figure()
     rect = [0.1, 0.1, 0.8, 0.8]
     scatterMarkers = ['s', 'o', '^', '8', 'p', \
