@@ -23,6 +23,10 @@ class KMeansTestCase(unittest.TestCase):
         results = [distance(array(x), array(y)) for x, y in zip(vector_xs, vector_ys)]
         self.assertEqual(expected_results, results)
 
+    def test_create_centroids(self):
+        # TODO: make it happen
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()

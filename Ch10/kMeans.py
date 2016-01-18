@@ -37,7 +37,13 @@ def distance(vector_x, vector_y):
     return norm(vector_x, vector_y)
 
 
-def get_centroids(dataset, k):
+def create_centroids(dataset, k):
+    """ Create initial centroids randomly.
+
+    :param dataset: np.ndarray
+    :param k:
+    :return: np.mat
+    """
     n = shape(dataset)[1]
     centroids = mat(zeros((k, n)))  # create centroid mat
     for j in range(n):  # create random cluster centers, within bounds of each dimension
@@ -47,7 +53,7 @@ def get_centroids(dataset, k):
     return centroids
 
 
-def kmeans(dataset, k, get_distance=distance, create_centroids=get_centroids):
+def kmeans(dataset, k, get_distance=distance, create_centroids=create_centroids):
     m = shape(dataset)[0]
     cluster_assignment = mat(zeros((m, 2)))  # create mat to assign data points
     # to a centroid, also holds SE of each point
