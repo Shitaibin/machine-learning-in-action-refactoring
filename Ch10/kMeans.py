@@ -10,8 +10,10 @@ from time import sleep
 
 import matplotlib.pyplot as plt
 from numpy import *
+from numpy.linalg import norm
 
 
+# TODO: make unit test
 # TODO: optimize numpy import
 
 def load_dataset(file_name):  # general function to parse tab -delimited floats
@@ -24,8 +26,15 @@ def load_dataset(file_name):  # general function to parse tab -delimited floats
     return data_matrix
 
 
-def distance(vector_x, vector_b):
-    return sqrt(sum(power(vector_x - vector_b, 2)))  # la.norm(vector_x-vector_b)
+def distance(vector_x, vector_y):
+    """Euclid distance between two points.
+
+    :param vector_x: np.ndarray
+    :param vector_y: np.ndarray
+    :return: float.
+    """
+    # return sqrt(sum(power(vector_x - vector_y, 2)))  # la.norm(vector_x-vector_y)
+    return norm(vector_x, vector_y)
 
 
 def get_centroids(dataset, k):
@@ -86,7 +95,7 @@ def binary_kmeans(dataset, k, get_distance=distance):
                 best_cluster_assignment = split_cluster_assignment.copy()
                 lowest_SSE = sse_split + sse_not_split
         best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 1)[0], 0] = len(
-            centroids_list)  # change 1 to 3,4, or whatever
+                centroids_list)  # change 1 to 3,4, or whatever
         best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 0)[0], 0] = best_centroid
         print 'the best_centroid is: ', best_centroid
         print 'the len of best_cluster_assignment is: ', len(best_cluster_assignment)
