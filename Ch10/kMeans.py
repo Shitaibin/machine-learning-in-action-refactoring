@@ -54,19 +54,21 @@ def create_centroids(dataset, k):
     return centroids
 
 
-def kmeans(dataset, k, get_distance=distance, create_centroids=create_centroids):
+def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroids):
     """
 
-    :param dataset:
-    :param k:
-    :param get_distance:
-    :param create_centroids:
+    :param dataset: array-like.
+    :param k: int.
+    :param get_distance: function.
+    :param get_init_centroids:
     :return:
     """
-    m = shape(dataset)[0]
+    # m = shape(dataset)[0]
+    dataset = mat(dataset)
+    m = dataset.shape[0]
     cluster_assignment = mat(zeros((m, 2)))  # create mat to assign data points
     # to a centroid, also holds SE of each point
-    centroids = create_centroids(dataset, k)
+    centroids = get_init_centroids(dataset, k)
     cluster_changed = True
     while cluster_changed:
         cluster_changed = False
@@ -89,14 +91,16 @@ def kmeans(dataset, k, get_distance=distance, create_centroids=create_centroids)
 
 
 def binary_kmeans(dataset, k, get_distance=distance):
-    m = shape(dataset)[0]
+    # m = shape(dataset)[0]
+    dataset = mat(dataset)
+    m = dataset.shape[0]
     cluster_assignment = mat(zeros((m, 2)))
     centroid0 = mean(dataset, axis=0).tolist()[0]
     centroids_list = [centroid0]  # create a list with one centroid
     for j in range(m):  # calc initial Error
         cluster_assignment[j, 1] = get_distance(mat(centroid0), dataset[j, :]) ** 2
     while len(centroids_list) < k:
-        lowest_SSE = inf
+        lowest_sse = inf
         for i in range(len(centroids_list)):
             points_in_cluster = dataset[nonzero(cluster_assignment[:, 0].A == i)[0],
                                 :]  # get the data points currently in cluster i
@@ -104,11 +108,11 @@ def binary_kmeans(dataset, k, get_distance=distance):
             sse_split = sum(split_cluster_assignment[:, 1])  # compare the SSE to the current minimum
             sse_not_split = sum(cluster_assignment[nonzero(cluster_assignment[:, 0].A != i)[0], 1])
             print "sse_split, and notSplit: ", sse_split, sse_not_split
-            if (sse_split + sse_not_split) < lowest_SSE:
+            if (sse_split + sse_not_split) < lowest_sse:
                 best_centroid = i
                 best_new_centroid = centroid_matrix
                 best_cluster_assignment = split_cluster_assignment.copy()
-                lowest_SSE = sse_split + sse_not_split
+                lowest_sse = sse_split + sse_not_split
         best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 1)[0], 0] = len(
                 centroids_list)  # change 1 to 3,4, or whatever
         best_cluster_assignment[nonzero(best_cluster_assignment[:, 0].A == 0)[0], 0] = best_centroid
@@ -168,7 +172,7 @@ def cluster_clubs(n_cluster=5):
     my_centroids, clust_assignment = binary_kmeans(data_matrix, n_cluster, get_distance=SLC_distance)
     fig = plt.figure()
     rect = [0.1, 0.1, 0.8, 0.8]
-    scatter_markers = ['s', 'o', '^', '8', 'p', \
+    scatter_markers = ['s', 'o', '^', '8', 'p',
                        'd', 'v', 'h', '>', '<']
     axprops = dict(xticks=[], yticks=[])
     ax0 = fig.add_axes(rect, label='ax0', **axprops)

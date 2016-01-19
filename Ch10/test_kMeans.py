@@ -28,7 +28,6 @@ class KMeansTestCase(unittest.TestCase):
         pass
 
     def test_kmeans(self):
-        # TODO: unittest for kmeans
         # I find it's also hard to test. Because the initial centroids is randomly.
         pass
 
