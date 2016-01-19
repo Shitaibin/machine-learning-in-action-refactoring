@@ -9,11 +9,13 @@ import urllib
 from time import sleep
 
 import matplotlib.pyplot as plt
-from numpy import *
+# from numpy import *
+from numpy import (inf, shape,
+                   mat, zeros, nonzero, mean, random,
+                   sin, arccos, cos, pi)
+
 from numpy.linalg import norm
 
-
-# TODO: optimize numpy import
 
 def load_dataset(file_name):  # general function to parse tab -delimited floats
     data_matrix = []  # assume last column is target value
