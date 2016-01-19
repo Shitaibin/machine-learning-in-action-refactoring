@@ -4,13 +4,24 @@ import numpy as np
 from numpy import (array, )
 from numpy.linalg import norm
 
-from kMeans import distance
+from kMeans import distance, load_dataset
 
 
 class KMeansTestCase(unittest.TestCase):
     """
 
     """
+
+    def test_load_dataset(self):
+        dataset = [[1, 2], [3, 4]]
+        file_name = "temp_test_kmeans.txt"
+        f = open(file_name, "w")
+        lines = ["{}\t{}\n".format(line[0], line[1]) for line in dataset]
+        f.writelines(lines)
+        f.close()
+
+        dataset_loaded = load_dataset(file_name)
+        self.assertEqual(dataset, dataset_loaded)
 
     def test_distance(self):
         vector_xs = np.asarray([[1],

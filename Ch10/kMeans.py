@@ -10,8 +10,7 @@ from time import sleep
 
 import matplotlib.pyplot as plt
 # from numpy import *
-from numpy import (inf, shape,
-                   mat, zeros, nonzero, mean, random,
+from numpy import (inf, mat, zeros, nonzero, mean, random,
                    sin, arccos, cos, pi)
 
 from numpy.linalg import norm
@@ -45,7 +44,9 @@ def create_centroids(dataset, k):
     :param k:
     :return: np.mat
     """
-    n = shape(dataset)[1]
+    # n = shape(dataset)[1]
+    dataset = mat(dataset)
+    n = dataset.shape[1]
     centroids = mat(zeros((k, n)))  # create centroid mat
     for j in range(n):  # create random cluster centers, within bounds of each dimension
         min_j = min(dataset[:, j])
