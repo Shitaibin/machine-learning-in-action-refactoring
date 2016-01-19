@@ -17,13 +17,18 @@ from numpy.linalg import norm
 
 
 def load_dataset(file_name):  # general function to parse tab -delimited floats
+    """Load dataset from file_name.
+
+    :param file_name: string.
+    :return: np.matrix.
+    """
     data_matrix = []  # assume last column is target value
     fr = open(file_name)
     for line in fr.readlines():
         current_line = line.strip().split('\t')
         float_line = map(float, current_line)  # map all elements to float()
         data_matrix.append(float_line)
-    return data_matrix
+    return mat(data_matrix)
 
 
 def distance(vector_x, vector_y):

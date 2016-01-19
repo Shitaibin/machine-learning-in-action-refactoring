@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from numpy import (array, )
+from numpy import (array)
 from numpy.linalg import norm
 
 from kMeans import distance, load_dataset
@@ -21,7 +21,8 @@ class KMeansTestCase(unittest.TestCase):
         f.close()
 
         dataset_loaded = load_dataset(file_name)
-        self.assertEqual(dataset, dataset_loaded)
+        self.assertIsInstance(dataset_loaded, np.matrix)
+        self.assertEqual(dataset, dataset_loaded.tolist())
 
     def test_distance(self):
         vector_xs = np.asarray([[1],
