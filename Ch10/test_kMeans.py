@@ -24,7 +24,12 @@ class KMeansTestCase(unittest.TestCase):
         self.assertEqual(expected_results, results)
 
     def test_create_centroids(self):
-        # TODO: make it happen
+        # hard to test, there is random in create centroids
+        pass
+
+    def test_kmeans(self):
+        # TODO: unittest for kmeans
+        # I find it's also hard to test. Because the initial centroids is randomly.
         pass
 
 

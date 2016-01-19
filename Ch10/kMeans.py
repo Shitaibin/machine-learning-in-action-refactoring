@@ -13,7 +13,6 @@ from numpy import *
 from numpy.linalg import norm
 
 
-# TODO: make unit test
 # TODO: optimize numpy import
 
 def load_dataset(file_name):  # general function to parse tab -delimited floats
@@ -54,6 +53,14 @@ def create_centroids(dataset, k):
 
 
 def kmeans(dataset, k, get_distance=distance, create_centroids=create_centroids):
+    """
+
+    :param dataset:
+    :param k:
+    :param get_distance:
+    :param create_centroids:
+    :return:
+    """
     m = shape(dataset)[0]
     cluster_assignment = mat(zeros((m, 2)))  # create mat to assign data points
     # to a centroid, also holds SE of each point
