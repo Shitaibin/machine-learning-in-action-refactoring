@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1f9de14-7f85-4566-bc11-ac8bad323130" name="Default" comment="refactor load_dataset and his test&#10;&#10;">
+    <list default="true" id="d1f9de14-7f85-4566-bc11-ac8bad323130" name="Default" comment="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Ch10/kMeans.py" afterPath="$PROJECT_DIR$/Ch10/kMeans.py" />
     </list>
@@ -34,8 +34,8 @@
           <file leaf-file-name="kMeans.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Ch10/kMeans.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.305026">
-                  <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+                <state vertical-scroll-proportion="0.33333334">
+                  <caret line="82" column="23" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
                   <folding>
                     <element signature="e#142#153#0" expanded="true" />
                   </folding>
@@ -70,11 +70,9 @@
           <file leaf-file-name="test_kMeans.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Ch10/test_kMeans.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5181976">
-                  <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
-                  <folding>
-                    <element signature="e#0#15#0" expanded="true" />
-                  </folding>
+                <state vertical-scroll-proportion="0.6006944">
+                  <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -600,7 +598,19 @@
       <option name="project" value="LOCAL" />
       <updated>1453171967511</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="fix bug in distance&#10;&#10;">
+      <created>1453261823244</created>
+      <option name="number" value="00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1453261823244</updated>
+    </task>
+    <task id="LOCAL-00035" summary="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;">
+      <created>1453261957987</created>
+      <option name="number" value="00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1453261957987</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TodoView">
@@ -616,15 +626,15 @@
     <frame x="52" y="18" width="2237" height="953" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16371077" sideWeight="0.4919355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16371077" sideWeight="0.4919355" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3227771" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42021924" sideWeight="0.5115962" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34390244" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32560974" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41951218" sideWeight="0.48840383" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2630938" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17007731" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26341462" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17007731" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11973684" sideWeight="0.5070422" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3951613" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -650,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="mod test: X or y is(are) np.ndarray" />
-    <MESSAGE value="fixed #2" />
     <MESSAGE value="fix test error: feat_names has been changed by test 1" />
     <MESSAGE value="refactoring method __majority_class__" />
     <MESSAGE value="refactoring method __majority_class__&#10;" />
@@ -675,7 +683,9 @@
     <MESSAGE value="fix some warning&#10;" />
     <MESSAGE value="unittest for load_dataset&#10;" />
     <MESSAGE value="refactor load_dataset and his test&#10;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor load_dataset and his test&#10;&#10;" />
+    <MESSAGE value="fix bug in distance&#10;&#10;" />
+    <MESSAGE value="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -729,9 +739,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -749,9 +757,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1086,18 +1092,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ch10/test_kMeans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5181976">
-          <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.6006944">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Ch10/kMeans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.305026">
-          <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="82" column="23" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
           <folding>
             <element signature="e#142#153#0" expanded="true" />
           </folding>

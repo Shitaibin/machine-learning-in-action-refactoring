@@ -78,22 +78,28 @@ def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroid
     cluster_changed = True
     while cluster_changed:
         cluster_changed = False
-        for i in range(m):  # for each data point assign it to the closest centroid
-            min_distance = inf
-            min_index = -1
-            for j in range(k):
-                distance_i_j = get_distance(centroids[j, :], dataset[i, :])
-                if distance_i_j < min_distance:
-                    min_distance = distance_i_j
-                    min_index = j
-            if cluster_assignment[i, 0] != min_index: cluster_changed = True
-            cluster_assignment[i, :] = min_index, min_distance ** 2
+        cluster_changed = reassign_points(centroids, cluster_assignment,
+                                          cluster_changed, dataset, get_distance, k, m)
         print centroids
         for cent in range(k):  # recalculate centroids
             points_in_cluster = dataset[
                 nonzero(cluster_assignment[:, 0].A == cent)[0]]  # get all the point in this cluster
             centroids[cent, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
     return centroids, cluster_assignment
+
+
+def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):
+    for i in range(m):  # for each data point assign it to the closest centroid
+        min_distance = inf
+        min_index = -1
+        for j in range(k):
+            distance_i_j = get_distance(centroids[j, :], dataset[i, :])
+            if distance_i_j < min_distance:
+                min_distance = distance_i_j
+                min_index = j
+        if cluster_assignment[i, 0] != min_index: cluster_changed = True
+        cluster_assignment[i, :] = min_index, min_distance ** 2
+    return cluster_changed
 
 
 def binary_kmeans(dataset, k, get_distance=distance):
