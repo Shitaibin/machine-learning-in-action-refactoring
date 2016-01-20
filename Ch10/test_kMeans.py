@@ -4,7 +4,7 @@ import numpy as np
 from numpy import (array)
 from numpy.linalg import norm
 
-from kMeans import distance, load_dataset
+from kMeans import distance, load_dataset, kmeans
 
 
 class KMeansTestCase(unittest.TestCase):
@@ -41,6 +41,8 @@ class KMeansTestCase(unittest.TestCase):
 
     def test_kmeans(self):
         # I find it's also hard to test. Because the initial centroids is randomly.
+        dataset = load_dataset("testSet.txt")
+        centroids, cluster_assignment = kmeans(dataset, 4)
         pass
 
 
