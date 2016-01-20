@@ -81,11 +81,23 @@ def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroid
         cluster_changed = reassign_points(centroids, cluster_assignment,
                                           cluster_changed, dataset, get_distance, k, m)
         print centroids
-        for cent in range(k):  # recalculate centroids
-            points_in_cluster = dataset[
-                nonzero(cluster_assignment[:, 0].A == cent)[0]]  # get all the point in this cluster
-            centroids[cent, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
+        recalculate_means(centroids, cluster_assignment, dataset, k)
     return centroids, cluster_assignment
+
+
+def recalculate_means(centroids, cluster_assignment, dataset, k):
+    """
+
+    :param centroids: np.matrix. old centroids
+    :param cluster_assignment: np.matrix.
+    :param dataset: np.matrix
+    :param k: int.
+    :return:
+    """
+    for cent in range(k):  # recalculate centroids
+        points_in_cluster = dataset[
+            nonzero(cluster_assignment[:, 0].A == cent)[0]]  # get all the point in this cluster
+        centroids[cent, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
 
 
 def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1f9de14-7f85-4566-bc11-ac8bad323130" name="Default" comment="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;">
+    <list default="true" id="d1f9de14-7f85-4566-bc11-ac8bad323130" name="Default" comment="refactor: extract method from kmeans&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Ch10/kMeans.py" afterPath="$PROJECT_DIR$/Ch10/kMeans.py" />
     </list>
@@ -34,8 +34,8 @@
           <file leaf-file-name="kMeans.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Ch10/kMeans.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.33333334">
-                  <caret line="82" column="23" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
+                <state vertical-scroll-proportion="0.41319445">
+                  <caret line="93" column="18" selection-start-line="93" selection-start-column="18" selection-end-line="93" selection-end-column="18" />
                   <folding>
                     <element signature="e#142#153#0" expanded="true" />
                   </folding>
@@ -610,7 +610,13 @@
       <option name="project" value="LOCAL" />
       <updated>1453261957987</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="refactor: extract method from kmeans&#10;">
+      <created>1453262148762</created>
+      <option name="number" value="00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1453262148762</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView">
@@ -633,7 +639,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34390244" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32560974" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41951218" sideWeight="0.48840383" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26341462" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26341462" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17007731" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11973684" sideWeight="0.5070422" order="2" side_tool="true" content_ui="tabs" />
@@ -660,7 +666,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="fix test error: feat_names has been changed by test 1" />
     <MESSAGE value="refactoring method __majority_class__" />
     <MESSAGE value="refactoring method __majority_class__&#10;" />
     <MESSAGE value="add param criterion to decision tree, default is id3" />
@@ -685,7 +690,8 @@
     <MESSAGE value="refactor load_dataset and his test&#10;&#10;" />
     <MESSAGE value="fix bug in distance&#10;&#10;" />
     <MESSAGE value="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="add test for kmeans: not test, just call kmeans, at least, make sure kmeans is work &#10;&#10;" />
+    <MESSAGE value="refactor: extract method from kmeans&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: extract method from kmeans&#10;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1100,8 +1106,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ch10/kMeans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="82" column="23" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.41319445">
+          <caret line="93" column="18" selection-start-line="93" selection-start-column="18" selection-end-line="93" selection-end-column="18" />
           <folding>
             <element signature="e#142#153#0" expanded="true" />
           </folding>
