@@ -39,7 +39,7 @@ def distance(vector_x, vector_y):
     :return: float.
     """
     # return sqrt(sum(power(vector_x - vector_y, 2)))  # la.norm(vector_x-vector_y)
-    return norm(vector_x, vector_y)
+    return norm(vector_x - vector_y)
 
 
 def create_centroids(dataset, k):
