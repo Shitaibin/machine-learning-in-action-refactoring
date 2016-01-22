@@ -80,7 +80,7 @@ def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroid
         cluster_changed = False
         cluster_changed = reassign_points(centroids, cluster_assignment,
                                           cluster_changed, dataset, get_distance, k, m)
-        print centroids
+        # print centroids
         recalculate_means(centroids, cluster_assignment, dataset, k)
     return centroids, cluster_assignment
 
@@ -105,12 +105,16 @@ def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get
         min_distance = inf
         min_index = -1
         for j in range(k):
-            distance_i_j = get_distance(centroids[j, :], dataset[i, :])
+            distance_i_j = get_distance(centroids[j], dataset[i])
+            # distance_i_j = get_distance(centroids[j, :], dataset[i, :])
             if distance_i_j < min_distance:
                 min_distance = distance_i_j
                 min_index = j
-        if cluster_assignment[i, 0] != min_index: cluster_changed = True
-        cluster_assignment[i, :] = min_index, min_distance ** 2
+        if cluster_assignment[i, 0] != min_index:
+            cluster_changed = True
+        cluster_assignment[i] = min_index, min_distance ** 2
+        # cluster_assignment[i, :] = min_index, min_distance ** 2
+
     return cluster_changed
 
 

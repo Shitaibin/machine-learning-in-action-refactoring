@@ -43,7 +43,7 @@ class KMeansTestCase(unittest.TestCase):
         # I find it's also hard to test. Because the initial centroids is randomly.
         dataset = load_dataset("testSet.txt")
         centroids, cluster_assignment = kmeans(dataset, 4)
-        pass
+        print centroids
 
 
 if __name__ == "__main__":
