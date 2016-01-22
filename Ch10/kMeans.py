@@ -94,10 +94,10 @@ def recalculate_means(centroids, cluster_assignment, dataset, k):
     :param k: int.
     :return:
     """
-    for cent in range(k):  # recalculate centroids
+    for centroid_id in range(k):  # recalculate centroids
         points_in_cluster = dataset[
-            nonzero(cluster_assignment[:, 0].A == cent)[0]]  # get all the point in this cluster
-        centroids[cent, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
+            nonzero(cluster_assignment[:, 0].A == centroid_id)[0]]  # get all the point in this cluster
+        centroids[centroid_id, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
 
 
 def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):
