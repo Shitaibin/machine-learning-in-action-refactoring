@@ -76,10 +76,12 @@ def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroid
     # to a centroid, also holds SE of each point
     centroids = get_init_centroids(dataset, k)
     cluster_changed = True
-    while cluster_changed:
+    stop = False
+    while not stop:
         cluster_changed = False
-        cluster_changed = reassign_points(centroids, cluster_assignment,
-                                          cluster_changed, dataset, get_distance, k, m)
+        cluster_changed, n_changed_points = reassign_points(centroids, cluster_assignment,
+                                                            cluster_changed, dataset, get_distance, k, m)
+        stop = should_stop(m, n_changed_points)
         # print centroids
         recalculate_means(centroids, cluster_assignment, dataset, k)
     return centroids, cluster_assignment
@@ -129,11 +131,11 @@ def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get
 
         cluster_assignment[i] = min_index, min_distance ** 2
         # cluster_assignment[i, :] = min_index, min_distance ** 2
-
+    return cluster_changed, n_count_changed_points
     return should_stop(cluster_changed, m, n_count_changed_points)
 
 
-def should_stop(cluster_changed, n_samples, n_count_changed_points):
+def should_stop(n_samples, n_count_changed_points):
     """ Judge weather should stop iterate. Using weak stop condition.
 
     Weak stop condition: The number of changed points less than 1% of n_samples, the number of total points.
@@ -142,9 +144,9 @@ def should_stop(cluster_changed, n_samples, n_count_changed_points):
     :param n_count_changed_points: int.
     :return: Boolean.
     """
-    if n_count_changed_points < n_samples / 100:
-        cluster_changed = False
-    return cluster_changed
+    if n_count_changed_points <= n_samples / 100:
+        return True
+    return False
 
 
 def binary_kmeans(dataset, k, get_distance=distance):
