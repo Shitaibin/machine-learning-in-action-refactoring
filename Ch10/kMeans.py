@@ -101,6 +101,18 @@ def recalculate_means(centroids, cluster_assignment, dataset, k):
 
 
 def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):
+    """Assign points to new centroids. Using weak stop condition.
+
+    :param centroids:
+    :param cluster_assignment:
+    :param cluster_changed:
+    :param dataset:
+    :param get_distance:
+    :param k:
+    :param m:
+    :return:
+    """
+    n_count_changed_points = 0
     for i in range(m):  # for each data point assign it to the closest centroid
         min_distance = inf
         min_index = -1
@@ -110,10 +122,16 @@ def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get
             if distance_i_j < min_distance:
                 min_distance = distance_i_j
                 min_index = j
+
         if cluster_assignment[i, 0] != min_index:
             cluster_changed = True
+            n_count_changed_points += 1
+
         cluster_assignment[i] = min_index, min_distance ** 2
         # cluster_assignment[i, :] = min_index, min_distance ** 2
+
+    if n_count_changed_points < m / 100:
+        cluster_changed = False
 
     return cluster_changed
 
