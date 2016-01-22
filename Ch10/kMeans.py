@@ -101,7 +101,7 @@ def recalculate_means(centroids, cluster_assignment, dataset, k):
 
 
 def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):
-    """Assign points to new centroids. Using weak stop condition.
+    """Assign points to new centroids.
 
     :param centroids:
     :param cluster_assignment:
@@ -130,9 +130,20 @@ def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get
         cluster_assignment[i] = min_index, min_distance ** 2
         # cluster_assignment[i, :] = min_index, min_distance ** 2
 
-    if n_count_changed_points < m / 100:
-        cluster_changed = False
+    return should_stop(cluster_changed, m, n_count_changed_points)
 
+
+def should_stop(cluster_changed, n_samples, n_count_changed_points):
+    """ Judge weather should stop iterate. Using weak stop condition.
+
+    Weak stop condition: The number of changed points less than 1% of n_samples, the number of total points.
+    :param cluster_changed: Boolean.
+    :param n_samples: int.
+    :param n_count_changed_points: int.
+    :return: Boolean.
+    """
+    if n_count_changed_points < n_samples / 100:
+        cluster_changed = False
     return cluster_changed
 
 
