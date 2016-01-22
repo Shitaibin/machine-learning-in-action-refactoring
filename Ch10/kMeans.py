@@ -75,12 +75,10 @@ def kmeans(dataset, k, get_distance=distance, get_init_centroids=create_centroid
     cluster_assignment = mat(zeros((m, 2)))  # create mat to assign data points
     # to a centroid, also holds SE of each point
     centroids = get_init_centroids(dataset, k)
-    cluster_changed = True
     stop = False
     while not stop:
-        cluster_changed = False
-        cluster_changed, n_changed_points = reassign_points(centroids, cluster_assignment,
-                                                            cluster_changed, dataset, get_distance, k, m)
+        n_changed_points = reassign_points(centroids, cluster_assignment,
+                                           dataset, get_distance, k, m)
         stop = should_stop(m, n_changed_points)
         # print centroids
         recalculate_means(centroids, cluster_assignment, dataset, k)
@@ -102,12 +100,11 @@ def recalculate_means(centroids, cluster_assignment, dataset, k):
         centroids[centroid_id, :] = mean(points_in_cluster, axis=0)  # assign centroid to mean
 
 
-def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get_distance, k, m):
+def reassign_points(centroids, cluster_assignment, dataset, get_distance, k, m):
     """Assign points to new centroids.
 
     :param centroids:
     :param cluster_assignment:
-    :param cluster_changed:
     :param dataset:
     :param get_distance:
     :param k:
@@ -126,13 +123,11 @@ def reassign_points(centroids, cluster_assignment, cluster_changed, dataset, get
                 min_index = j
 
         if cluster_assignment[i, 0] != min_index:
-            cluster_changed = True
             n_count_changed_points += 1
 
         cluster_assignment[i] = min_index, min_distance ** 2
         # cluster_assignment[i, :] = min_index, min_distance ** 2
-    return cluster_changed, n_count_changed_points
-    return should_stop(cluster_changed, m, n_count_changed_points)
+    return n_count_changed_points
 
 
 def should_stop(n_samples, n_count_changed_points):
