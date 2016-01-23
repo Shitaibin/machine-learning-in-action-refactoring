@@ -1,3 +1,7 @@
+"""
+Created on Jan, 2016
+@author: Shitaibin
+"""
 import unittest
 
 import numpy as np
